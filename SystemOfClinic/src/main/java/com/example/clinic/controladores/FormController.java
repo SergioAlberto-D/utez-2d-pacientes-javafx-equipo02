@@ -15,26 +15,44 @@ import java.io.IOException;
 
 public class FormController {
     @FXML private TextField txtCurp, txtName, txtEdad, txtTelefono, txtAlergias;
-
+    private Paciente Editar;
     private ObservableList<Paciente> lista;
     private PacienteService service = new PacienteService();
     public void setListaCompartida(ObservableList<Paciente> lista) {
         this.lista = lista;
     }
+    public void Edition(Paciente paciente, ObservableList<Paciente> listaCompartida) {
+        this.Editar = paciente;
+        this.lista = listaCompartida;
+        txtCurp.setPromptText(paciente.getCurp());
+        txtName.setPromptText(paciente.getNombre());
+        txtEdad.setPromptText(paciente.getEdad());
+        txtTelefono.setPromptText(paciente.getTelefono());
+        txtAlergias.setPromptText(paciente.getAlergias());
+        txtCurp.setEditable(false);
+        txtCurp.setOpacity(0.7);
+    }
     @FXML
     private void onaddPaciente(){
-        String curp= txtCurp.getText();
-        String name= txtName.getText();
-        String edad= txtEdad.getText();
-        String telefono= txtTelefono.getText();
-        String alergias= txtAlergias.getText();
+        String curp = txtCurp.getText().isEmpty() ? txtCurp.getPromptText() : txtCurp.getText();
+        String name = txtName.getText().isEmpty() ? txtName.getPromptText() : txtName.getText();
+        String edad = txtEdad.getText().isEmpty() ? txtEdad.getPromptText() : txtEdad.getText();
+        String telefono = txtTelefono.getText().isEmpty() ? txtTelefono.getPromptText() : txtTelefono.getText();
+        String alergias = txtAlergias.getText().isEmpty() ? txtAlergias.getPromptText() : txtAlergias.getText();
+
         try {
-            service.addPaciente(curp,name,edad,telefono,alergias,lista);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Éxito");
-            alert.setHeaderText(null);
-            alert.setContentText("Paciente registrado correctamente.");
-            alert.showAndWait();
+            if (Editar !=null){
+                Editar.nombreProperty().set(name);
+                Editar.edadProperty().set(edad);
+                Editar.telefonoProperty().set(telefono);
+                Editar.alergiasProperty().set(alergias);
+
+                service.guardarCambios(lista);
+                mostrarMensaje("Éxito", "Paciente actualizado correctamente.");
+            }else {
+                service.addPaciente(curp, name, edad, telefono, alergias, lista);
+                mostrarMensaje("Éxito", "Paciente registrado correctamente.");
+            }
             txtCurp.clear();
             txtEdad.clear();
             txtAlergias.clear();
@@ -46,6 +64,12 @@ public class FormController {
         } catch (IOException e) {
             mostrarError("Error al mandar el archivo"+e.getMessage());
         }
+    }
+    private void mostrarMensaje(String titulo, String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
     private void mostrarError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

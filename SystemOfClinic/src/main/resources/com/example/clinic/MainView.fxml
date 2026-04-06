@@ -37,9 +37,9 @@
       <HBox alignment="CENTER" prefHeight="51.0" prefWidth="807.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#handleNuevo" text="Nuevo Paciente" textAlignment="CENTER" underline="true" />
-            <Button mnemonicParsing="false" text="Editar" textAlignment="CENTER" underline="true" />
-            <Button mnemonicParsing="false" text="Cambiar Estatus" textAlignment="CENTER" underline="true" />
-            <Button mnemonicParsing="false" text="Eliminar" textAlignment="CENTER" underline="true" />
+            <Button mnemonicParsing="false" onAction="#Editarlo" text="Editar" textAlignment="CENTER" underline="true" />
+            <Button mnemonicParsing="false" onAction="#CambioEstatus" text="Cambiar Estatus" textAlignment="CENTER" underline="true" />
+            <Button mnemonicParsing="false" onAction="#Eliminar" text="Eliminar" textAlignment="CENTER" underline="true" />
             <HBox prefHeight="478.0" prefWidth="98.0" />
             <Label fx:id="lblMsg" prefHeight="44.0" prefWidth="181.0" text="Cargando......." />
          </children>

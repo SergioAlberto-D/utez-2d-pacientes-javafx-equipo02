@@ -65,4 +65,14 @@ public class PacienteService {
             }
         }
     }
+    public void guardarCambios(List<Paciente> lista) throws IOException {
+        List<String> lineas = new ArrayList<>();
+        for (Paciente p : lista) {
+            String linea = String.join("~",
+                    p.getCurp(), p.getNombre(), p.getEdad(),
+                    p.getTelefono(), p.getAlergias(), p.getEstatus());
+            lineas.add(linea);
+        }
+        repo.overwriteFile(lineas);
+    }
 }

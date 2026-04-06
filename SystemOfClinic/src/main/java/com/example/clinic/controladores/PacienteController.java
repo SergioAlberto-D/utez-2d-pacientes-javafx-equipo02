@@ -113,4 +113,67 @@ public class PacienteController {
             lblMsg.setText("Error al abrir el formulario");
         }
     }
+    @FXML
+    private void Eliminar() {
+        Paciente seleccionado = tablaPacientes.getSelectionModel().getSelectedItem();
+
+        if (seleccionado != null) {
+            listaPacientes.remove(seleccionado);
+            try {
+                service.guardarCambios(listaPacientes);
+                lblMsg.setText("Paciente eliminado");
+                lblMsg.setStyle("-fx-text-fill: green");
+            } catch (IOException e) {
+                lblMsg.setText("Error al sincronizar archivo");
+            }
+        } else {
+            lblMsg.setText("Seleccione un paciente");
+            lblMsg.setStyle("-fx-text-fill: red");
+        }
+    }
+    @FXML
+    private void CambioEstatus() {
+        Paciente seleccionado = tablaPacientes.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            String Estado = seleccionado.getEstatus().equalsIgnoreCase("Activo") ? "Inactivo" : "Activo";
+            seleccionado.estatusProperty().set(Estado);
+            try {
+                service.guardarCambios(listaPacientes);
+                Resumen();
+                lblMsg.setText("Estado actualizado");
+                lblMsg.setStyle("-fx-text-fill: green");
+            } catch (IOException e) {
+                lblMsg.setText("Error al guardar");
+            }
+        }
+    }
+    @FXML
+    private void Editarlo() {
+        Paciente seleccionado = tablaPacientes.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            lblMsg.setText("Seleccione un paciente para editar");
+            lblMsg.setStyle("-fx-text-fill: orange");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/clinic/Formulario.fxml"));
+            Parent root = loader.load();
+
+            FormController formCtrl = loader.getController();
+            formCtrl.Edition(seleccionado, this.listaPacientes);
+            Scene scene = new Scene(root, 450, 600);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Editar Paciente");
+
+            Stage currentStage = (Stage) tablaPacientes.getScene().getWindow();
+            currentStage.close();
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            lblMsg.setText("Error al abrir edición");
+        }
+    }
 }

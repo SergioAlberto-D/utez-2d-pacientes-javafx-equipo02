@@ -12,6 +12,9 @@ public class FileRepository {
     private final Path filePath = Paths.get("Datos", "pacientes.csv");
     private void ensureFileExist() throws IOException {
         if (Files.notExists(filePath)){
+            if (Files.notExists(filePath.getParent())) {
+                Files.createDirectories(filePath.getParent());
+            }
             Files.createFile(filePath);
         }
     }
@@ -23,8 +26,10 @@ public class FileRepository {
         Files.writeString(filePath,line+System.lineSeparator(), StandardCharsets.UTF_8,
                 StandardOpenOption.APPEND);
     }
-    public void appendSentLine(List<String> lines) throws IOException {
-        Files.write(filePath,lines , StandardCharsets.UTF_8,
+    public void overwriteFile(List<String> lines) throws IOException {
+        ensureFileExist();
+        Files.write(filePath, lines, StandardCharsets.UTF_8,
+                StandardOpenOption.WRITE,
                 StandardOpenOption.TRUNCATE_EXISTING);
     }
 }
