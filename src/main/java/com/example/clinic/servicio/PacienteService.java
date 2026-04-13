@@ -30,13 +30,13 @@ public class PacienteService {
         return result;
     }
     public void addPaciente(String curp,String name,String edad,String telefono,String alergias,List<Paciente> lista) throws IOException {
-        validar(curp, name, edad, telefono, lista);
+        validar(curp, name, edad, telefono, lista,null);
         String alergiasv = (alergias == null || alergias.isBlank()) ? "Ninguna" : alergias.trim();
         repo.appendNewLine(curp+"~"+name+"~"+edad+"~"+telefono+"~"+alergiasv+"~"+"Activo");
     }
-    public void validar(String curp,String name,String edad,String telefono,List<Paciente> lista){
-        if(name == null || name.isBlank() || name.length()<3) {
-            throw new IllegalArgumentException("El nombre no cumple con los estandares");
+    public void validar(String curp, String name, String edad, String telefono, List<Paciente> lista, Paciente actual) {
+        if (name == null || name.isBlank() || name.length() < 3) {
+            throw new IllegalArgumentException("El nombre no cumple con los estándares (mínimo 3 caracteres)");
         }
 
         if (telefono == null || !telefono.matches("\\d{10}")) {
@@ -47,12 +47,13 @@ public class PacienteService {
             if (edad == null || edad.isBlank()) {
                 throw new IllegalArgumentException("La edad no puede estar vacía");
             }
-            int Numerico = Integer.parseInt(edad.trim());
-            if (Numerico <= 0 && Numerico >=120) {
-                throw new IllegalArgumentException("La persona debe tener una edad creible");
+            int numerico = Integer.parseInt(edad.trim());
+
+            if (numerico <= 0 || numerico >= 120) {
+                throw new IllegalArgumentException("La persona debe tener una edad creíble (1-119)");
             }
-        }catch (NumberFormatException e){
-            throw new IllegalArgumentException("La edad debe ser un numero valido");
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("La edad debe ser un número válido");
         }
 
         if (curp == null || curp.isBlank()) {
@@ -60,12 +61,16 @@ public class PacienteService {
         }
 
         for (Paciente p : lista) {
-            if (p.getCurp().equalsIgnoreCase(curp.trim())) {
-                throw new IllegalArgumentException("¡Error! El CURP ya existe.");
+
+            if (p != actual && p.getCurp().equalsIgnoreCase(curp.trim())) {
+                throw new IllegalArgumentException("¡Error! El CURP '" + curp + "' ya pertenece a otro paciente.");
             }
         }
     }
     public void guardarCambios(List<Paciente> lista) throws IOException {
+        for (Paciente p : lista) {
+            validar(p.getCurp(), p.getNombre(), p.getEdad(), p.getTelefono(), lista, p);
+        }
         List<String> lineas = new ArrayList<>();
         for (Paciente p : lista) {
             String linea = String.join("~",
