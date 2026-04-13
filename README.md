@@ -1,29 +1,53 @@
-# utez-2d-pacientes-javafx-equipo02
-Tarea integradora  Lenin Sanchez Gonzalez | Serrano Maldonado sergio Alberto
+# Sistema de Gestión de Pacientes - Clínica (Equipo 02)
+Desarrolladores: Lenin Sanchez Gonzalez | Serrano Maldonado Sergio Alberto
 
-El proyecto integra una funcionalidad con una tabla visual seccionando en columnas los diferentes apartados donde se 
-contempla el Curp, nombre , edad, telefono, alergias y su estatus ya sea activo o inactivo; el programa contempla el poder
-añadir a un paciente, poder modificar los datos ingresados, cambiar el estado de activo a inactivo, elimar el paciente de 
-la memoria a largo plazo
+Versión: 1 (Estable)
 
-V0.1
+Este proyecto es una aplicación de escritorio desarrollada en JavaFX diseñada para la
+administración eficiente de expedientes clínicos. El sistema permite gestionar el ciclo de 
+vida completo de la información de un paciente bajo una arquitectura robusta de capas.
 
-La version 0.1 puede mostrar la memoria en una tabla observable, puede añadir a pacientes y mediante contadores
-puedo mostrar el total de personas los activos y los inactivos por separado.
+🚀 Funcionalidades Principales
 
-Metodo de ejecucion
+El sistema ofrece una interfaz intuitiva para interactuar con la base de datos local (pacientes.csv):
 
-Para ejcutar el programa:
 
-1.-Necesitas tener previamente instalado el jkd 25 lts  https://adoptium.net/es/temurin/releases
+/Panel de Visualización: Tabla dinámica que muestra CURP, Nombre, Edad, Teléfono, Alergias y Estatus (Activo/Inactivo).
 
-2.-Tener un IDE descargado, recomiendo intellij IDEA
+/Gestión CRUD Completa:Registro: Validación en tiempo real de datos (CURP único, formato de teléfono y rangos de edad).
 
-3.-Cuando se desacargue y abras el proyecto en un IDE por lo general se descargaran las dependencias de maven
+/Edición: Permite modificar datos existentes manteniendo la integridad del CURP.
 
-3.- Caundo tengas abierto el proyecto en la carpeta del proyecto vas a la direccion src/java/com/example/clinic seleccionas
-el archivo launcher.java y en la parte de arriba donde se ve el nombre del proyecto y la rama se vera un boton al lado de donde dice
-Current File
+/Eliminación: Borrado permanente de registros en la memoria a largo plazo (archivo físico).
+
+/Control de Estatus: Alternancia rápida entre estados "Activo" e "Inactivo" para control administrativo.
+
+/Estadísticas en Tiempo Real: Contadores dinámicos que muestran el total de pacientes, así como el desglose de activos e inactivos mediante el uso de Java Streams.
+
+
+🛠️ Stack TecnológicoLenguaje: Java 25 (LTS).
+
+-Framework UI: JavaFX con FXML para la separación de vista y lógica.
+
+-Persistencia: Sistema de archivos plano (CSV) utilizando un delimitador personalizado (~) para evitar conflictos de lectura.
+
+-Gestión de Dependencias: Maven. Arquitectura: Modelo-Vista-Controlador (MVC) con Capa de Servicio y Repositorio.
+
+📂 Estructura del ProyectoModelo (Paciente.java): Utiliza StringProperty para implementar Data Binding, permitiendo que los cambios en los datos se reflejen automáticamente en la interfaz.
+
+=Servicio (PacienteService.java): Contiene la lógica de negocio y las validaciones críticas (RegEx y unicidad de CURP).
+
+=Repositorio (FileRepository.java): Gestiona la entrada/salida de archivos utilizando la librería moderna Java NIO.
+
+=Controladores: Orquestan la interacción entre el usuario y la lógica del sistema. 
+
+📋 Requisitos e InstalaciónJDK: Se requiere Java Development Kit 25 LTS instalado.
+
+=IDE: Se recomienda IntelliJ IDEA para una mejor integración con JavaFX y Maven. 
+
+=Dependencias: Al abrir el proyecto, permita que Maven descargue las dependencias necesarias.
+
+⚙️ EjecuciónNavegue a la ruta: src/main/java/com/example/clinic.Localice el archivo Launcher.java.Haga clic en el botón de reproducción (Run) situado en la parte superior derecha de su IDE o junto a la declaración de la clase.
 
 ![img.png](materialextra/img.png)
 
